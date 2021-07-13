@@ -1,5 +1,6 @@
 const express = require('express')
 const Cars = require('./cars-model')
+const mw = require('./cars-middleware')
 
 const router = express.Router()
 
@@ -10,8 +11,8 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/:id', (req, res) => {
-  console.log("get car by id router")
+router.get('/:id', mw.checkCarId, (req, res) => {
+  res.json(req.car)
 })
 
 router.post('/', (req, res) => {

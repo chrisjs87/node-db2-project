@@ -1,5 +1,16 @@
+const Cars = require('./cars-model')
+
 const checkCarId = (req, res, next) => {
-  // DO YOUR MAGIC
+  Cars.getById(req.params.id)
+    .then(car => {
+      if (!car) {
+        res.status(404).json({ message: `car with id ${req.params.id} is not found` })
+        next()
+      } else {
+        req.car = car
+        next()
+      }
+    })
 }
 
 const checkCarPayload = (req, res, next) => {
@@ -12,4 +23,11 @@ const checkVinNumberValid = (req, res, next) => {
 
 const checkVinNumberUnique = (req, res, next) => {
   // DO YOUR MAGIC
+}
+
+module.exports = {
+  checkCarId,
+  checkCarPayload,
+  checkVinNumberValid,
+  checkVinNumberUnique,
 }
