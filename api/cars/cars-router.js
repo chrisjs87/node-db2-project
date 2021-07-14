@@ -21,20 +21,18 @@ router.get('/:id', mw.checkCarId,  async (req, res, next) => {
   res.json(req.car)
 })
 
-router.post('/', mw.checkCarPayload, mw.checkVinNumberValid, mw.checkVinNumberUnique, (req, res) => {
-  
-  // Cars.create(req.body)
-  //   .then(id => {
-  //     Cars.getById(id)
-  //       .then(car => {
-  //         res.status(201).json(car)
-  //       })
-  //   })
-
-  Cars.create(req.body)
-    .then(car => {
-      res.json(car)
-    })
+router.post(
+  '/', 
+  mw.checkCarPayload, 
+  mw.checkVinNumberValid,
+  mw.checkVinNumberUnique, 
+  async (req, res, next) => {
+  try {
+    const car = await Cars.create(req.body)
+    res.json(car)
+  } catch (err) {
+    next(err)
+  }
 })
 
 

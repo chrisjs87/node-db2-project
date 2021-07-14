@@ -8,12 +8,13 @@ const getById = (id) => {
   return db('cars').where('car_id', id).first()
 }
 
+const getByVin = (vin) => {
+  return db('cars').where('vin', vin).first()
+}
+
 const create = (car) => {
-  console.log("attempting to create")
-  // const [id] = await db('cars').insert(car)
-  // const newCar = getById(id)
-  // return newCar
   return db('cars').insert(car)
+    .then(([id]) => getById(id))
 }
 
 
@@ -21,4 +22,5 @@ module.exports = {
   getAll,
   getById,
   create,
+  getByVin,
 }
