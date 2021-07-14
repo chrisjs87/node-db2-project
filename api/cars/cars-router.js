@@ -4,19 +4,37 @@ const mw = require('./cars-middleware')
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  Cars.getAll()
-    .then(cars => {
-      res.status(200).json(cars)
-    })
+router.get('/', async (req, res, next) => {
+  // Cars.getAll()
+  //   .then(cars => {
+  //     res.status(200).json(cars)
+  //   })
+  try {
+    const cars = await Cars.getAll()
+    res.json(cars)
+  } catch (err) {
+    next(err)
+  }
 })
 
-router.get('/:id', mw.checkCarId, (req, res) => {
+router.get('/:id', mw.checkCarId,  async (req, res, next) => {
   res.json(req.car)
 })
 
-router.post('/', (req, res) => {
-  console.log("post new car router")
+router.post('/', mw.checkCarPayload, mw.checkVinNumberValid, mw.checkVinNumberUnique, (req, res) => {
+  
+  // Cars.create(req.body)
+  //   .then(id => {
+  //     Cars.getById(id)
+  //       .then(car => {
+  //         res.status(201).json(car)
+  //       })
+  //   })
+
+  Cars.create(req.body)
+    .then(car => {
+      res.json(car)
+    })
 })
 
 
